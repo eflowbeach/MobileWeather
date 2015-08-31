@@ -1,0 +1,59 @@
+<html>
+<head>
+    <title>NWS EDD - Mobile Weather</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css">
+    <link rel="stylesheet" href="js/vendors/leaflet-0.7.3/leaflet.css"/>
+    <link rel="stylesheet" href="js/vendors/leaflet-plugins/Leaflet.Coordinates-0.1.3.css"/>
+    <link rel="stylesheet" href="js/vendors/leaflet-plugins/Control.FullScreen.css"/>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.0/themes/smoothness/jquery-ui.css"/>
+    <link rel="stylesheet" href="js/timedimension/leaflet.timedimension.control.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<div id="map" class="map"></div>
+
+<script type="text/javascript" src="js/vendors/jquery-2.0.0.min.js"></script>
+<script type="text/javascript" src="js/vendors/jquery-ui-1.10.2.min.js"></script>
+<script type="text/javascript" src="js/vendors/DateFormat.js"></script>
+
+<script type="text/javascript" src="js/vendors/leaflet-0.7.3/leaflet.js"></script>
+<script type="text/javascript" src="js/vendors/leaflet-plugins/Leaflet.Coordinates-0.1.3.min.js"></script>
+<script type="text/javascript" src="js/vendors/leaflet-plugins/Control.FullScreen.js"></script>
+<script type="text/javascript" src="js/vendors/leaflet-plugins/NonTiledLayer.js"></script>
+<script type="text/javascript" src="js/vendors/leaflet-plugins/NonTiledLayer.WMS.js"></script>
+<script type="text/javascript" src="js/vendors/iso8601.js"></script>
+
+<!-- Load Esri Leaflet from CDN -->
+<script src="//cdn.jsdelivr.net/leaflet.esri/1.0.0/esri-leaflet.js"></script>
+
+<script type="text/javascript" src="js/timedimension/leaflet.timedimension.js"></script>
+<script type="text/javascript" src="js/timedimension/leaflet.timedimension.util.js"></script>
+<script type="text/javascript" src="js/timedimension/leaflet.timedimension.layer.js"></script>
+<script type="text/javascript" src="js/timedimension/leaflet.timedimension.layer.wms.js"></script>
+<script type="text/javascript" src="js/timedimension/leaflet.timedimension.player.js"></script>
+<script type="text/javascript" src="js/timedimension/leaflet.timedimension.control.js"></script>
+
+<script type="text/javascript" src="data/us-states.js"></script>
+
+<script type="text/javascript" src="js/mobileweather.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+
+<script type="text/javascript">
+            $(document).ready(function() {
+                $.ajax('js/mobileweather.js', {dataType: 'script'})
+                    .always(function(response) {                        
+                        $("#code").text(response.responseText);
+                        $('pre code').each(function(i, block) {
+                            hljs.highlightBlock(block);
+                        });
+                    });
+            });
+
+</script>
+</body>
+</html>
