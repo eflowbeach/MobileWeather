@@ -13,7 +13,8 @@ var map = L.map('map', {
                 buffer: 10,
                 transitionTime: 200,
                 loop: true
-            }
+            },
+            speedSlider: false
         },
     timeDimensionOptions: {
         timeInterval: "PT2H/" + endDate.toISOString(),
