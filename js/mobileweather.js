@@ -47,7 +47,9 @@ var radarWMS = L.nonTiledLayer.wms(wmsUrl, {
     opacity: 0.8,
     attribution: 'nowCOAST'
 });
-var testTimeLayer = L.timeDimension.layer.wms(radarWMS);
+var testTimeLayer = L.timeDimension.layer.wms(radarWMS, {
+    updateTimeDimension: true
+});
 testTimeLayer.addTo(map);
 
 var theLegend = L.control({
