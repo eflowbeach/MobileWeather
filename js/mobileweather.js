@@ -24,7 +24,7 @@ var map = L.map('map', {
         speedSlider: false
     },
     timeDimensionOptions: {
-        timeInterval: "PT2H/" + endDate.toISOString(),
+        timeInterval: "PT30M/" + endDate.toISOString(),
         period: "PT5M"
     },
     loop: true
