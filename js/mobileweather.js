@@ -3,7 +3,7 @@
 
 // Current End Time
 var endDate = new Date();
-endDate.setUTCMinutes(0, 0, 0);
+//endDate.setUTCMinutes(0, 0, 0);
 
 var map = L.map('map', {
     zoom: 4,
