@@ -25,7 +25,8 @@ var map = L.map('map', {
     },
     timeDimensionOptions: {
         timeInterval: "PT30M/" + endDate.toISOString(),
-        period: "PT5M"
+        period: "PT5M",
+        loadingTimeout: 5000
     },
     loop: true
 });
@@ -39,7 +40,8 @@ var layer = L.esri.basemapLayer("DarkGray", {
 map.locate({setView: true, maxZoom: 16});
 
 // Radar time-enabled WMS
-var wmsUrl = "http://new.nowcoast.noaa.gov/arcgis/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/WMSServer"
+var wmsUrl = "http://new.nowcoast.noaa.gov/arcgis/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/WMSServer";
+var proxy = 'server/proxy.php';
 var radarWMS = L.nonTiledLayer.wms(wmsUrl, {
     layers: '1',
     format: 'image/png',
@@ -48,6 +50,7 @@ var radarWMS = L.nonTiledLayer.wms(wmsUrl, {
     attribution: 'nowCOAST'
 });
 var testTimeLayer = L.timeDimension.layer.wms(radarWMS, {
+    proxy: proxy,
     updateTimeDimension: true
 });
 testTimeLayer.addTo(map);
