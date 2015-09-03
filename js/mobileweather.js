@@ -15,20 +15,20 @@ var map = L.map('map', {
     timeDimension: true,
     timeDimensionControl: true,
     timeDimensionControlOptions: {
-        autoPlay: true,
+        autoPlay: false,
         playerOptions: {
             buffer: 10,
             transitionTime: 200,
             loop: true
         },
         speedSlider: false
-    },
+    }
 //    timeDimensionOptions: {
 //        timeInterval: "PT30M/" + endDate.toISOString(),
 //        period: "PT5M",
 //        loadingTimeout: 5000
 //    },
-    loop: true
+
 });
 
 // Basemap
