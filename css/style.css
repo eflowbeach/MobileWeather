@@ -373,3 +373,10 @@ ul.examples li a img{
 .information a{
     color: #80bf43;
 }
+
+a.timecontrol-slider{
+  height: auto;
+  width: 70px;
+  padding: 4px 15px;
+}
+
