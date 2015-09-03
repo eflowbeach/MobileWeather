@@ -380,3 +380,7 @@ a.timecontrol-slider{
   padding: 4px 15px;
 }
 
+a.timecontrol-slider:hover{
+  width: 70;
+}
+
