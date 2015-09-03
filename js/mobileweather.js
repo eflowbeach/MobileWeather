@@ -23,11 +23,11 @@ var map = L.map('map', {
         },
         speedSlider: false
     },
-    timeDimensionOptions: {
-        timeInterval: "PT30M/" + endDate.toISOString(),
-        period: "PT5M",
-        loadingTimeout: 5000
-    },
+//    timeDimensionOptions: {
+//        timeInterval: "PT30M/" + endDate.toISOString(),
+//        period: "PT5M",
+//        loadingTimeout: 5000
+//    },
     loop: true
 });
 
@@ -41,7 +41,7 @@ map.locate({setView: true, maxZoom: 16});
 
 // Radar time-enabled WMS
 var wmsUrl = "http://new.nowcoast.noaa.gov/arcgis/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/WMSServer";
-var proxy = 'server/proxy.php';
+
 var radarWMS = L.nonTiledLayer.wms(wmsUrl, {
     layers: '1',
     format: 'image/png',
@@ -49,9 +49,12 @@ var radarWMS = L.nonTiledLayer.wms(wmsUrl, {
     opacity: 0.8,
     attribution: 'nowCOAST'
 });
+
+var proxy = 'server/proxy.php';
 var testTimeLayer = L.timeDimension.layer.wms(radarWMS, {
     proxy: proxy,
-    updateTimeDimension: true
+    updateTimeDimension: true,
+    updateTimeDimensionMode: "replace"
 });
 testTimeLayer.addTo(map);
 
