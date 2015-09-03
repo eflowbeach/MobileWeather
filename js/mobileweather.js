@@ -15,7 +15,7 @@ var map = L.map('map', {
     timeDimension: true,
     timeDimensionControl: true,
     timeDimensionControlOptions: {
-        autoPlay: false,
+        autoPlay: true,
         playerOptions: {
             buffer: 10,
             transitionTime: 200,
