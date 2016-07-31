@@ -6,7 +6,7 @@ var endDate = new Date();
 //endDate.setUTCMinutes(0, 0, 0);
 
 var map = L.map('map', {
-    zoom: 10,
+    zoom: 8,
     scrollWheelZoom: true,
     inertia: true,
     inertiaDeceleration: 2000,
@@ -17,17 +17,17 @@ var map = L.map('map', {
     timeDimensionControlOptions: {
         autoPlay: true,
         playerOptions: {
-            buffer: 10,
+            buffer: 3,
             transitionTime: 200,
             loop: true
         },
         speedSlider: false
     }
-//    timeDimensionOptions: {
-//        timeInterval: "PT30M/" + endDate.toISOString(),
-//        period: "PT5M",
-//        loadingTimeout: 5000
-//    },
+    ,timeDimensionOptions: {
+        timeInterval: "PT30M/" + endDate.toISOString(),
+        period: "PT5M",
+        loadingTimeout: 5000
+    },
 
 });
 
@@ -37,7 +37,7 @@ var layer = L.esri.basemapLayer("DarkGray", {
 }).addTo(map);
 
 // Geo-locate
-map.locate({setView: true, maxZoom: 16});
+map.locate({setView: true, maxZoom: 8});
 
 function onLocationFound(e) {
     var radius = e.accuracy / 2;
@@ -71,8 +71,8 @@ var radarWMS = L.nonTiledLayer.wms(wmsUrl, {
 var proxy = 'server/proxy.php';
 var testTimeLayer = L.timeDimension.layer.wms(radarWMS, {
     proxy: proxy,
-    updateTimeDimension: true,
-    updateTimeDimensionMode: "replace"
+    updateTimeDimension: false,//true,
+    updateTimeDimensionMode: "union"//"replace"
 });
 testTimeLayer.addTo(map);
 
@@ -80,24 +80,24 @@ var theLegend = L.control({
     position: 'topright'
 });
 
-theLegend.onAdd = function(map) {
-    var src = "http://new.nowcoast.noaa.gov/images/legends/radar.png";
-    var div = L.DomUtil.create('div', 'info legend');
-    div.style.width = '270px';
-    div.style.height = '50px';
-    div.innerHTML += '<b>Legend</b><br><img src="' + src + '" alt="legend">';
-    return div;
-};
-theLegend.addTo(map);
+// theLegend.onAdd = function(map) {
+//     var src = "http://new.nowcoast.noaa.gov/images/legends/radar.png";
+//     var div = L.DomUtil.create('div', 'info legend');
+//     div.style.width = '270px';
+//     div.style.height = '50px';
+//     div.innerHTML += '<b>Legend</b><br><img src="' + src + '" alt="legend">';
+//     return div;
+// };
+// theLegend.addTo(map);
 
-L.control.coordinates({
-    position: "bottomright",
-    decimals: 3,
-    labelTemplateLat: "Latitude: {y}",
-    labelTemplateLng: "Longitude: {x}",
-    useDMS: false,
-    enableUserInput: true
-}).addTo(map);
+// L.control.coordinates({
+//     position: "bottomright",
+//     decimals: 3,
+//     labelTemplateLat: "Latitude: {y}",
+//     labelTemplateLng: "Longitude: {x}",
+//     useDMS: false,
+//     enableUserInput: true
+// }).addTo(map);
 
 // Basemap labels
 var labels = L.esri.basemapLayer('DarkGrayLabels').addTo(map);
