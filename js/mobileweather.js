@@ -37,28 +37,27 @@ var layer = L.esri.basemapLayer("DarkGray", {
 }).addTo(map);
 
 // Geo-locate
-map.locate({setView: true, maxZoom: 8});
+map.locate({setView: true, maxZoom: 8, enableHighAccuracy:true});
 
 function onLocationFound(e) {
     var radius = e.accuracy / 2;
 
     L.marker(e.latlng).addTo(map)
-        .bindPopup("You are within " + radius + " meters from this point").openPopup();
-
-    //L.circle(e.latlng, radius).addTo(map);
+        .bindPopup("You are within " + radius + " meters from this point");//.openPopup();
+    L.circle(e.latlng, radius).addTo(map);
 }
 
 map.on('locationfound', onLocationFound);
 
 
 function onLocationError(e) {
-    alert(e.message);
+    console.log(e.message);
 }
 
 map.on('locationerror', onLocationError);
 
 // Radar time-enabled WMS
-var wmsUrl = "http://new.nowcoast.noaa.gov/arcgis/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/WMSServer";
+var wmsUrl = "https://new.nowcoast.noaa.gov/arcgis/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/WMSServer";
 
 var radarWMS = L.nonTiledLayer.wms(wmsUrl, {
     layers: '1',
@@ -76,9 +75,9 @@ var testTimeLayer = L.timeDimension.layer.wms(radarWMS, {
 });
 testTimeLayer.addTo(map);
 
-var theLegend = L.control({
-    position: 'topright'
-});
+// var theLegend = L.control({
+//     position: 'topright'
+// });
 
 // theLegend.onAdd = function(map) {
 //     var src = "http://new.nowcoast.noaa.gov/images/legends/radar.png";
@@ -114,19 +113,19 @@ function style(feature) {
     };
 }
 
-function zoomToFeature(e) {
-    map.fitBounds(e.target.getBounds());
-}
+// function zoomToFeature(e) {
+//     map.fitBounds(e.target.getBounds());
+// }
 
-function onEachFeature(feature, layer) {
-    layer.on({
-        click: zoomToFeature
-    });
-}
+// function onEachFeature(feature, layer) {
+//     layer.on({
+//         click: zoomToFeature
+//     });
+// }
 
 var geojson = L.geoJson(statesData, {
-    style: style,
-    onEachFeature: onEachFeature
+    style: style//,
+    // onEachFeature: onEachFeature
 }).addTo(map);
 
 map.on('layeradd', function(e) {
