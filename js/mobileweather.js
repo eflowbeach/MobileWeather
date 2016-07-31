@@ -6,7 +6,7 @@ var endDate = new Date();
 //endDate.setUTCMinutes(0, 0, 0);
 
 var map = L.map('map', {
-    zoom: 4,
+    zoom: 10,
     scrollWheelZoom: true,
     inertia: true,
     inertiaDeceleration: 2000,
@@ -38,6 +38,24 @@ var layer = L.esri.basemapLayer("DarkGray", {
 
 // Geo-locate
 map.locate({setView: true, maxZoom: 16});
+
+function onLocationFound(e) {
+    var radius = e.accuracy / 2;
+
+    L.marker(e.latlng).addTo(map)
+        .bindPopup("You are within " + radius + " meters from this point").openPopup();
+
+    L.circle(e.latlng, radius).addTo(map);
+}
+
+map.on('locationfound', onLocationFound);
+
+
+function onLocationError(e) {
+    alert(e.message);
+}
+
+map.on('locationerror', onLocationError);
 
 // Radar time-enabled WMS
 var wmsUrl = "http://new.nowcoast.noaa.gov/arcgis/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/WMSServer";
@@ -116,12 +134,12 @@ map.on('layeradd', function(e) {
 });
 
 // NHC Hurricane Tracks
-var nhcTracks = L.tileLayer.wms("http://new.nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer", {
-    layers: '0,1,2,3,4,5,6,7,8',
-    format: 'image/png',
-    transparent: true,
-    opacity: 0.5,
-    format: 'image/png32',
-    attribution: 'nowCOAST'
-});
-nhcTracks.addTo(map);
+//var nhcTracks = L.tileLayer.wms("http://new.nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer", {
+//    layers: '0,1,2,3,4,5,6,7,8',
+//    format: 'image/png',
+//    transparent: true,
+//    opacity: 0.5,
+//    format: 'image/png32',
+//    attribution: 'nowCOAST'
+//});
+//nhcTracks.addTo(map);
