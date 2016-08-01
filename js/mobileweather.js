@@ -1,12 +1,11 @@
 // Written by: Jonathan Wolfe
 // Date: 8/31/2015
-
 // Current End Time
 var endDate = new Date();
-//endDate.setUTCMinutes(0, 0, 0);
+endDate.setUTCSeconds(0, 0);
 
 var map = L.map('map', {
-    zoom: 8,
+    zoom: 4,
     scrollWheelZoom: true,
     inertia: true,
     inertiaDeceleration: 2000,
@@ -18,37 +17,37 @@ var map = L.map('map', {
         autoPlay: true,
         playerOptions: {
             buffer: 3,
-            transitionTime: 200,
+            transitionTime: 500,
             loop: true
         },
         speedSlider: false
-    }
-    ,timeDimensionOptions: {
-        timeInterval: "PT30M/" + endDate.toISOString(),
-        period: "PT5M",
-        loadingTimeout: 5000
     },
+    timeDimensionOptions: {
+        timeInterval: "PT30M/" + endDate.toISOString(),
+        period: "PT5M"
+    }
 
 });
 
 // Basemap
-var layer = L.esri.basemapLayer("DarkGray", {
+var layer = L.esri.basemapLayer("NationalGeographic", {
     detectRetina: true
 }).addTo(map);
 
 // Geo-locate
-map.locate({setView: true, maxZoom: 8, enableHighAccuracy:true});
+map.locate({
+    setView: false,
+    maxZoom: 8,
+    enableHighAccuracy: true
+});
 
 function onLocationFound(e) {
-    var radius = e.accuracy / 2;
-
-    L.marker(e.latlng).addTo(map)
-        .bindPopup("You are within " + radius + " meters from this point");//.openPopup();
-    L.circle(e.latlng, radius).addTo(map);
+    L.marker(e.latlng).addTo(map);
+    //L.circle(e.latlng, radius).addTo(map);
+    map.setView(e.latlng, 8);
 }
 
 map.on('locationfound', onLocationFound);
-
 
 function onLocationError(e) {
     console.log(e.message);
@@ -63,17 +62,85 @@ var radarWMS = L.nonTiledLayer.wms(wmsUrl, {
     layers: '1',
     format: 'image/png',
     transparent: true,
-    opacity: 0.8,
+    opacity: 0.5,
     attribution: 'nowCOAST'
 });
 
 var proxy = 'server/proxy.php';
-var testTimeLayer = L.timeDimension.layer.wms(radarWMS, {
+var radarLayer = L.timeDimension.layer.wms(radarWMS, {
     proxy: proxy,
-    updateTimeDimension: false,//true,
-    updateTimeDimensionMode: "union"//"replace"
+    updateTimeDimension: false,
+    updateTimeDimensionMode: "replace"
 });
-testTimeLayer.addTo(map);
+radarLayer.addTo(map);
+
+
+// State overlay
+function style(feature) {
+    return {
+        weight: 2,
+        opacity: 1,
+        color: 'black',
+        dashArray: '3',
+        fillOpacity: 0
+    };
+}
+
+var geojson = L.geoJson(statesData, {
+    style: style
+}).addTo(map);
+
+var hazard_style = {
+    style: function(feature) {
+        if (feature.properties.phenomenon == "SV") {
+            return {
+                color: "yellow",
+                fill: 0,
+                opacity: 1
+            };
+        }
+        return {
+            color: feature.properties.color,
+            fill: 0,
+            opacity: 1
+        };
+    }
+}
+
+var hazard_layer = new L.geoJson(null, hazard_style);
+hazard_layer.addTo(map);
+
+
+
+$.ajax({
+    dataType: "json",
+    url: "server/hazards.php",
+    success: function(data) {
+        $(data.features).each(function(key, data) {
+            hazard_layer.addData(data);
+            //hazard_layer.bringToFront();
+        });
+    }
+}).error(function() {});
+
+
+map.on('drag', function(e) {
+    hazard_layer.bringToFront();
+    console.log('dragging');
+
+    //geojson.bringToFront();
+});
+
+// NHC Hurricane Tracks
+//var nhcTracks = L.tileLayer.wms("http://new.nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer", {
+//    layers: '0,1,2,3,4,5,6,7,8',
+//    format: 'image/png',
+//    transparent: true,
+//    opacity: 0.5,
+//    format: 'image/png32',
+//    attribution: 'nowCOAST'
+//});
+//nhcTracks.addTo(map);
 
 // var theLegend = L.control({
 //     position: 'topright'
@@ -99,20 +166,8 @@ testTimeLayer.addTo(map);
 // }).addTo(map);
 
 // Basemap labels
-var labels = L.esri.basemapLayer('DarkGrayLabels').addTo(map);
-labels.setZIndex(1000);
-
-// State overlay
-function style(feature) {
-    return {
-        weight: 2,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0
-    };
-}
-
+// var labels = L.esri.basemapLayer('DarkGrayLabels').addTo(map);
+// labels.setZIndex(1000);
 // function zoomToFeature(e) {
 //     map.fitBounds(e.target.getBounds());
 // }
@@ -122,23 +177,3 @@ function style(feature) {
 //         click: zoomToFeature
 //     });
 // }
-
-var geojson = L.geoJson(statesData, {
-    style: style//,
-    // onEachFeature: onEachFeature
-}).addTo(map);
-
-map.on('layeradd', function(e) {
-    geojson.bringToFront()
-});
-
-// NHC Hurricane Tracks
-//var nhcTracks = L.tileLayer.wms("http://new.nowcoast.noaa.gov/arcgis/services/nowcoast/wwa_meteocean_tropicalcyclones_trackintensityfcsts_time/MapServer/WMSServer", {
-//    layers: '0,1,2,3,4,5,6,7,8',
-//    format: 'image/png',
-//    transparent: true,
-//    opacity: 0.5,
-//    format: 'image/png32',
-//    attribution: 'nowCOAST'
-//});
-//nhcTracks.addTo(map);

@@ -80,7 +80,7 @@ L.TimeDimension.Util = {
             maxHour = validTimeRangeArray[1].split(':')[0];
             maxMinutes = validTimeRangeArray[1].split(':')[1];
         }
-        while (currentTime <= endTime) {
+        while (currentTime < endTime) {
             if (validTimeRange === undefined ||
                 (currentTime.getUTCHours() >= minHour && currentTime.getUTCHours() <= maxHour)
             ) {
@@ -91,7 +91,7 @@ L.TimeDimension.Util = {
             }
             this.addTimeDuration(currentTime, duration);
         }
-        if (currentTime > endTime){
+        if (currentTime >= endTime){
             result.push(endTime.getTime());
         }
         return result;
@@ -115,7 +115,7 @@ L.TimeDimension.Util = {
         } else {
             endTime = Date.parse(parts[1]);
             if (isNaN(endTime)) {
-                // -> format startTime/duration                
+                // -> format startTime/duration
                 duration = this.getTimeDuration(parts[1]);
                 endTime = new Date(startTime);
                 this.addTimeDuration(endTime, duration, true);
@@ -134,16 +134,17 @@ L.TimeDimension.Util = {
             return result;
         }
         if (typeof times == 'string' || times instanceof String) {
-            var testTimeRange = times.split("/");
-            if (testTimeRange.length == 3) {
-                result = this.parseAndExplodeTimeRange(times);
-            } else {
-                var dates = times.split(",");
-                var time;
-                for (var i = 0, l = dates.length; i < l; i++) {
-                    time = Date.parse(dates[i]);
-                    if (!isNaN(time)) {
-                        result.push(time);
+            var timeRanges = times.split(",");
+            var timeRange;
+            var timeValue;
+            for (var i=0, l=timeRanges.length; i<l; i++){
+                timeRange = timeRanges[i];
+                if (timeRange.split("/").length == 3) {                
+                    result = result.concat(this.parseAndExplodeTimeRange(timeRange));
+                } else {
+                    timeValue = Date.parse(timeRange);
+                    if (!isNaN(timeValue)) {
+                        result.push(timeValue);
                     }
                 }
             }

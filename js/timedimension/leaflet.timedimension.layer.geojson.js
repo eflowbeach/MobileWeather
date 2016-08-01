@@ -10,11 +10,16 @@ L.TimeDimension.Layer.GeoJson = L.TimeDimension.Layer.extend({
         this._updateTimeDimensionMode = this.options.updateTimeDimensionMode || 'extremes'; // 'union', 'replace' or extremes
         this._duration = this.options.duration || null;
         this._addlastPoint = this.options.addlastPoint || false;
+        this._waitForReady = this.options.waitForReady || false;
         this._defaultTime = 0;
         this._availableTimes = [];
         this._loaded = false;
         if (this._baseLayer.getLayers().length == 0) {
-            this._baseLayer.on("ready", this._onReadyBaseLayer, this);
+            if (this._waitForReady){
+                this._baseLayer.on("ready", this._onReadyBaseLayer, this);
+            }else{
+                this._loaded = true;
+            }
         } else {
             this._loaded = true;
             this._setAvailableTimes();
@@ -33,7 +38,7 @@ L.TimeDimension.Layer.GeoJson = L.TimeDimension.Layer.extend({
             method.call(context, this._currentLayer);
         }
         return L.TimeDimension.Layer.prototype.eachLayer.call(this, method, context);
-    },      
+    },
 
     isReady: function(time) {
         return this._loaded;
@@ -65,7 +70,7 @@ L.TimeDimension.Layer.GeoJson = L.TimeDimension.Layer.extend({
                 layer.addData(feature);
                 if (this._addlastPoint && feature.geometry.type == "LineString") {
                     if (feature.geometry.coordinates.length > 0) {
-                        var properties = feature.properties;                        
+                        var properties = feature.properties;
                         properties.last = true;
                         layer.addData({
                             type: 'Feature',

@@ -1,0 +1,15 @@
+[01-Aug-2016 00:46:09 UTC] PHP Warning:  file_get_contents(http://www.weather.gov/source/crh/warn_population.geojson): failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home/ubuntu/workspace/MobileWeather/server/hazards.php on line 4
+[01-Aug-2016 00:46:09 UTC] PHP Stack trace:
+[01-Aug-2016 00:46:09 UTC] PHP   1. {main}() /home/ubuntu/workspace/MobileWeather/server/hazards.php:0
+[01-Aug-2016 00:46:09 UTC] PHP   2. file_get_contents() /home/ubuntu/workspace/MobileWeather/server/hazards.php:4
+[01-Aug-2016 00:47:30 UTC] PHP Warning:  file_get_contents(http://www.weather.gov/source/crh/warn_population.geojson): failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home/ubuntu/workspace/MobileWeather/server/hazards.php on line 4
+[01-Aug-2016 00:47:30 UTC] PHP Stack trace:
+[01-Aug-2016 00:47:30 UTC] PHP   1. {main}() /home/ubuntu/workspace/MobileWeather/server/hazards.php:0
+[01-Aug-2016 00:47:30 UTC] PHP   2. file_get_contents() /home/ubuntu/workspace/MobileWeather/server/hazards.php:4
+[01-Aug-2016 00:47:49 UTC] PHP Warning:  file_get_contents(http://www.weather.gov/source/crh/warn_population.geojson): failed to open stream: HTTP request failed! HTTP/1.0 403 Forbidden
+ in /home/ubuntu/workspace/MobileWeather/server/hazards.php on line 4
+[01-Aug-2016 00:47:49 UTC] PHP Stack trace:
+[01-Aug-2016 00:47:49 UTC] PHP   1. {main}() /home/ubuntu/workspace/MobileWeather/server/hazards.php:0
+[01-Aug-2016 00:47:49 UTC] PHP   2. file_get_contents() /home/ubuntu/workspace/MobileWeather/server/hazards.php:4
